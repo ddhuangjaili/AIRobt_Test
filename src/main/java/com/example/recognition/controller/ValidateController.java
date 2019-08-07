@@ -32,7 +32,7 @@ public class ValidateController {
     @Resource
     ValidateService validateService;
 
-    @RequestMapping("/init")
+    //@RequestMapping("/init")
     public String validate(RequestParam request){
         String result = "";
         ResponseContent response = new ResponseContent();
@@ -89,7 +89,7 @@ public class ValidateController {
         return JSONObject.toJSONString(response);
     }
 
-    @RequestMapping("/videoFile")
+    //@RequestMapping("/videoFile")
     public String validateByVideoFile(MultipartFile videoFile){
         String result = "";
         ResponseContent response = new ResponseContent();

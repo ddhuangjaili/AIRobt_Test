@@ -7,4 +7,6 @@ import java.util.List;
 public interface RobotDataMaintainService {
 
     List<RegionEntity> selectAll();
+
+    List<String> getResult(List<Long> paramList);
 }

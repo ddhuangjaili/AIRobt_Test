@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.recognition.mapper.RegionTotalMapper">
+    <resultMap id="BaseResultMap" type="com.example.recognition.entity.RegionTotalEntity">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="pid" property="pid" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, pid, 'name', status
+    </sql>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from region_total
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(1) from region_exception
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+</mapper>

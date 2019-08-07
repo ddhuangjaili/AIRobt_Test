@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.recognition.mapper.CompensationMapper">
+    <resultMap id="BaseResultMap" type="com.example.recognition.entity.CompensationEntity">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="reg_id" property="regId" jdbcType="BIGINT" />
+        <result column="reg_name" property="regName" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, reg_id, reg_name, content,  status
+    </sql>
+
+    <select id="queryContent" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from compesation
+        where t.id = #{id,jdbcType=BIGINT}
+    </select>
+
+</mapper>
