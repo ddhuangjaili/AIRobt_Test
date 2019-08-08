@@ -1,20 +1,20 @@
-server:
-  port: 8080
-
-spring:
-  datasource:
-    username: zccztdevdb
-    password: zcczt123!
-    url: jdbc:mysql://106.15.193.29:3306/zccztdevdb?useUnicode=true&characterEncoding=utf-8&userSSL=true&serverTimezone=UTC
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#server:
+#  port: 8080
+#
+#spring:
+#  datasource:
+#    username: zccztdevdb
+#    password: zcczt123!
+#    url: jdbc:mysql://106.15.193.29:3306/zccztdevdb?useUnicode=true&characterEncoding=utf-8&userSSL=true&serverTimezone=UTC
+#    driver-class-name: com.mysql.cj.jdbc.Driver
 
 #mybatis:
   #mapper-locations: classpath:mapper/*Mapper.xml
 
 
-loggin:
-  level:
-    com:
-      example:
-        recognition:
-          mapper: debug
+#loggin:
+#  level:
+#    com:
+#      example:
+#        recognition:
+#          mapper: debug
