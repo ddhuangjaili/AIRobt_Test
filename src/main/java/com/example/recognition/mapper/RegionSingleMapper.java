@@ -19,4 +19,6 @@ public interface RegionSingleMapper {
      * @return
      */
     List<RegionSingleEntity> selectAllForFN();
+
+    String queryToCountry(long id);
 }

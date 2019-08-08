@@ -2,19 +2,19 @@ package com.example.recognition.service.impl;
 
 import com.example.recognition.entity.CompensationEntity;
 import com.example.recognition.entity.RegionEntity;
+import com.example.recognition.entity.RegionSingleEntity;
 import com.example.recognition.entity.RegionTotalEntity;
 import com.example.recognition.mapper.CompensationMapper;
 import com.example.recognition.mapper.RegionMapper;
+import com.example.recognition.mapper.RegionSingleMapper;
 import com.example.recognition.mapper.RegionTotalMapper;
-import com.example.recognition.entity.RobotQAEntity;
 import com.example.recognition.service.RobotDataMaintainService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Slf4j
 @Service
 public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
 
@@ -28,6 +28,9 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
 
     @Resource
     CompensationMapper compensationMapper;
+
+    @Resource
+    RegionSingleMapper regionSingleMapper;
 
     @Override
     public List<RegionEntity> selectAll() {
@@ -61,7 +64,7 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
         } else {
             for (long id : list) {
                 CompensationEntity com = compensationMapper.queryContent(id);
-                resultList.add(com.getRegName() + ":" + com.getContent());
+                resultList.add(com.getRegPid() == 0 ? "" : (getCountryName(com.getRegPid()) + "-") + com.getRegName() + ":" + com.getContent());
             }
         }
 
@@ -77,7 +80,7 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
         List<Long> removeList = new ArrayList<>();
         for (long lg :list){
             int i = regionTotalMapper.selectCount(lg);
-            if (i>1){
+            if (i == 1){
                 removeList.add(lg);
             } else {
                 int er = regionTotalMapper.effectiveQuery(lg);
@@ -93,5 +96,9 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
             flag = true;
         }
         return list;
+    }
+
+    private String getCountryName(long id){
+        return regionSingleMapper.queryToCountry(id);
     }
 }

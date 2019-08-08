@@ -1,8 +1,5 @@
 package com.example.recognition.model;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class RobotResultVo {
     private String id;
 

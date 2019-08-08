@@ -6,10 +6,11 @@
         <result column="reg_id" property="regId" jdbcType="BIGINT" />
         <result column="reg_name" property="regName" jdbcType="VARCHAR" />
         <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="reg_pid" property="regPid" jdbcType="BIGINT" />
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, reg_id, reg_name, content
+        id, reg_id, reg_name, content, reg_pid
     </sql>
 
     <select id="queryContent" resultMap="BaseResultMap">

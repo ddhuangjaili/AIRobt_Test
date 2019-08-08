@@ -10,6 +10,8 @@ public class CompensationEntity {
 
     private String content;
 
+    private long regPid;
+
     public long getId() {
         return id;
     }
@@ -42,4 +44,11 @@ public class CompensationEntity {
         this.regName = regName;
     }
 
+    public long getRegPid() {
+        return regPid;
+    }
+
+    public void setRegPid(long regPid) {
+        this.regPid = regPid;
+    }
 }

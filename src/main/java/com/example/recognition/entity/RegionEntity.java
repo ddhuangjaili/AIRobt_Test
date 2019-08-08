@@ -1,8 +1,5 @@
 package com.example.recognition.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class RegionEntity {
 
     private String id;

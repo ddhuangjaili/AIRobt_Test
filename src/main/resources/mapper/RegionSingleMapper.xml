@@ -25,4 +25,7 @@
         from region_foreign
     </select>
 
+    <select id="queryToCountry" resultType="java.lang.String">
+        select 'name' from region_exception where id = #{id,jdbcType=BIGINT}
+    </select>
 </mapper>
