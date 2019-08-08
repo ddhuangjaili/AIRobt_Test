@@ -110,26 +110,37 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
      * @param list
      * @return
      */
-    private List<Long> removeToNewList(List<Long> list){
-        List<Long> removeList = new ArrayList<>();
+    private List<Long> getNodeList(List<Long> list){
+        List<Long> nodeList = new ArrayList<>();
         for (long lg :list){
             int i = regionTotalMapper.selectCount(lg);
             if (i == 1){
-                removeList.add(lg);
-            } else {
+                nodeList.add(lg);
+            } /*else {
                 int er = regionTotalMapper.effectiveQuery(lg);
                 if (er == 0) {
-                    removeList.add(lg);
+                    //removeList.add(lg);
                 }
+            }*/
+        }
+        return nodeList;
+    }
+
+    /**
+     * 去除無效数据
+     * @param list
+     * @return
+     */
+    private List<Long> removeElments(List<Long> list){
+        List<Long> removeList = new ArrayList<>();
+        for (long lg :list){
+            int er = regionTotalMapper.effectiveQuery(lg);
+            if (er == 0) {
+                removeList.add(lg);
             }
         }
-
-        /*if (removeList.size() < list.size()) {
-            list.removeAll(removeList);
-        } else {
-            flag = true;
-        }*/
-        return removeList;
+        list.removeAll(removeList);
+        return list;
     }
 
     /**
@@ -139,10 +150,10 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
      */
     private Map<String,List<Long>> screenList(List<Long> totalList){
         Map<String,List<Long>> resultMap = new HashMap<>();
-        List<Long> nodeList = removeToNewList(totalList);
+        List<Long> nodeList = getNodeList(totalList);
         totalList.removeAll(nodeList);
         resultMap.put("node", nodeList);
-        resultMap.put("leaf",totalList);
+        resultMap.put("leaf",removeElments(totalList));
         return resultMap;
     }
 

@@ -10,9 +10,15 @@ public enum ResultMessage {
     ERROR_FILE_UPLOAD_NOPATH("9001"," video file upload fail, path is null! "),
     ERROR_BASE64_TO_FILE("9002","image base64 convert file fail."),
 
+    /**云小蜜**/
     JSON_FIRST_WORDS("","您可输入出差城市，如"),
-    JSON_LAST_WORDS("","。我会为您查询对应的出差标准哟~"),
+    JSON_LAST_WORDS("","等。我会为您查询对应的出差标准哟~"),
 
+    ROBOT_RESULT_SUCCESS("0000","success"),
+    ROBOT_RESULT_EMPTY("4000","未找到对应的结果"),
+    ROBOT_JSONPARAM_ERROR("4100","非法的请求参数,请输入正确的json"),
+    ROBOT_JSONPARAM_EMPTY("4200","请求参数为空"),
+    /**云小蜜**/
 
     ERROR_EMPTY_PARAM("9009","param list is empty, please get image base64 or file!"),
 

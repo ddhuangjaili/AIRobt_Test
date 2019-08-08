@@ -2,6 +2,8 @@ package com.example.recognition.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.recognition.entity.RegionEntity;
+import com.example.recognition.model.ApiResultVo;
+import com.example.recognition.model.ResultMessage;
 import com.example.recognition.model.RobotResultVo;
 import com.example.recognition.service.RobotDataMaintainService;
 import org.slf4j.Logger;
@@ -12,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/robot")
@@ -53,29 +52,53 @@ public class RobotController {
     //@ApiOperation("查询")
     public String queryToContentByRegId(@RequestBody String jsonIds){
         List<String> result = new ArrayList<>();
+        Map map;
+        ApiResultVo resultVo = null;
         try {
-            Map map = JSONObject.parseObject(jsonIds, Map.class);
-            Iterator iterator = map.entrySet().iterator();
-            List<String> paramList = new ArrayList<>();
-            while (iterator.hasNext()) {
-                Map.Entry next = (Map.Entry) iterator.next();
-                paramList = (List<String>) next.getValue();
-            }
+            map = JSONObject.parseObject(jsonIds, Map.class);
 
-            if (paramList.size() > 0) {
-                List<Long> parm = new ArrayList<>();
-                for(String arg : paramList){
-                    parm.add(Long.parseLong(arg));
+            if (!map.isEmpty()) {
+                Iterator iterator = map.entrySet().iterator();
+                List<String> paramList = new ArrayList<>();
+                while (iterator.hasNext()) {
+                    Map.Entry next = (Map.Entry) iterator.next();
+                    paramList = (List<String>) next.getValue();
                 }
 
-                result = robotDataMaintainService.getResult(parm);
+                if (paramList.size() > 0) {
+                    List<Long> parm = new ArrayList<>();
+                    for (String arg : paramList) {
+                        parm.add(Long.parseLong(arg));
+                    }
+
+                    result = robotDataMaintainService.getResult(parm);
+                }
+
+                resultVo = result.size() == 0 ?
+                        new ApiResultVo(ResultMessage.ROBOT_RESULT_EMPTY.getCode(),
+                                result,
+                                ResultMessage.ROBOT_RESULT_EMPTY.getMessage()) :
+
+                        new ApiResultVo(ResultMessage.ROBOT_RESULT_SUCCESS.getCode(),
+                                result,
+                                ResultMessage.ROBOT_RESULT_SUCCESS.getMessage());
+
+            } else {
+                logger.info(ResultMessage.ROBOT_JSONPARAM_EMPTY.getMessage()+ ",【{}】",jsonIds);
+                resultVo = new ApiResultVo(ResultMessage.ROBOT_JSONPARAM_EMPTY.getCode(),
+                        result,
+                        ResultMessage.ROBOT_JSONPARAM_EMPTY.getMessage());
             }
 
-        }catch (Exception e){
-            logger.error("参数【{}】转换异常", jsonIds);
+        } catch (Exception e){
+            logger.error(ResultMessage.ROBOT_JSONPARAM_ERROR.getMessage() + ",【{}】",jsonIds);
+            resultVo = new ApiResultVo(ResultMessage.ROBOT_JSONPARAM_ERROR.getCode(),
+                    result,
+                    ResultMessage.ROBOT_JSONPARAM_ERROR.getMessage());
         } finally {
-            return JSONObject.toJSONString(result.size() == 0 ? "未识别出正确的结果" : result);
+            return JSONObject.toJSONString(resultVo);
         }
+
     }
 
 }
