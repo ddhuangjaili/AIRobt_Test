@@ -70,7 +70,7 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
                     List<Long> leafList = idListMap.get(key);
                     for (long id : leafList) {
                         CompensationEntity com = compensationMapper.queryContent(id);
-                        resultList.add(com.getRegPid() == 0 ? "" : (getCountryName(com.getRegPid()) + "-") + com.getRegName() + ":" + com.getContent());
+                        resultList.add((com.getRegPid() == 0 ? "" : (getCountryName(com.getRegPid()) + "-") )+ com.getRegName() + ":" + com.getContent());
                     }
             }
 
