@@ -13,13 +13,10 @@ import com.example.recognition.service.RobotDataMaintainService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
-
-    private boolean flag = false;
 
     @Resource
     RegionMapper regionMapper;
@@ -38,16 +35,48 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
         return regionMapper.selectAll();
     }
 
-    @Override
+    /*@Override
     public List<String> getResult(List<Long> paramList) {
-        paramList = removeToNewList(paramList);
+        //paramList = removeToNewList(paramList);
         return resultStr(paramList);
-    }
+    }*/
 
-    private List<String> resultStr(List<Long> list){
+    public List<String> getResult(List<Long> paramList){
         List<String> resultList = new ArrayList<>();
+        Map<String, List<Long>> idListMap = screenList(paramList);
 
-        if (flag){
+        Set<String> keySet = idListMap.keySet();
+        for (String key : keySet){
+            switch (key){
+                case "node":
+                    List<Long> nodeList = idListMap.get(key);
+                    for (long id : nodeList){
+                        String countryName = regionTotalMapper.queryCountryById(id);
+                        List<RegionTotalEntity> entities = regionTotalMapper.queryCityByPid(id);
+                        List<String> cityList = new ArrayList<>();
+                        for (RegionTotalEntity entity :entities){
+                            cityList.add(entity.getRegName());
+                        }
+
+                        //String result = countryName + ":" + cityList.toString();
+                        String result = countryName + ":"
+                                + ResultMessage.JSON_FIRST_WORDS.getMessage()
+                                + cityList.toString().replace("[","【").replace("]","】")
+                                + ResultMessage.JSON_LAST_WORDS.getMessage();
+                        resultList.add(result);
+                    }
+                break;
+                default:
+                    List<Long> leafList = idListMap.get(key);
+                    for (long id : leafList) {
+                        CompensationEntity com = compensationMapper.queryContent(id);
+                        resultList.add(com.getRegPid() == 0 ? "" : (getCountryName(com.getRegPid()) + "-") + com.getRegName() + ":" + com.getContent());
+                    }
+            }
+
+        }
+
+        /*if (flag){
             //根据父ID查所有包含的地区
             for (long id : list){
                 String countryName = regionTotalMapper.queryCountryById(id);
@@ -71,7 +100,7 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
                 CompensationEntity com = compensationMapper.queryContent(id);
                 resultList.add(com.getRegPid() == 0 ? "" : (getCountryName(com.getRegPid()) + "-") + com.getRegName() + ":" + com.getContent());
             }
-        }
+        }*/
 
         return resultList;
     }
@@ -95,14 +124,33 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
             }
         }
 
-        if (removeList.size() < list.size()) {
+        /*if (removeList.size() < list.size()) {
             list.removeAll(removeList);
         } else {
             flag = true;
-        }
-        return list;
+        }*/
+        return removeList;
     }
 
+    /**
+     * 区分list集合种类
+     * @param totalList
+     * @return
+     */
+    private Map<String,List<Long>> screenList(List<Long> totalList){
+        Map<String,List<Long>> resultMap = new HashMap<>();
+        List<Long> nodeList = removeToNewList(totalList);
+        totalList.removeAll(nodeList);
+        resultMap.put("node", nodeList);
+        resultMap.put("leaf",totalList);
+        return resultMap;
+    }
+
+    /**
+     * 获取国家名称
+     * @param id
+     * @return
+     */
     private String getCountryName(long id){
         return regionSingleMapper.queryToCountry(id);
     }
