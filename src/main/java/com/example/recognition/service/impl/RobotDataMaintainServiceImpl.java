@@ -2,6 +2,7 @@ package com.example.recognition.service.impl;
 
 import com.example.recognition.entity.CompensationEntity;
 import com.example.recognition.entity.RegionEntity;
+import com.example.recognition.entity.RegionTotalEntity;
 import com.example.recognition.mapper.CompensationMapper;
 import com.example.recognition.mapper.RegionMapper;
 import com.example.recognition.mapper.RegionTotalMapper;
@@ -11,8 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -42,10 +42,20 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
 
     private List<String> resultStr(List<Long> list){
         List<String> resultList = new ArrayList<>();
+
         if (flag){
             //根据父ID查所有包含的地区
+            for (long id : list){
+                String countryName = regionTotalMapper.queryCountryById(id);
+                List<RegionTotalEntity> entities = regionTotalMapper.queryCityByPid(id);
+                List<String> cityList = new ArrayList<>();
+                for (RegionTotalEntity entity :entities){
+                    cityList.add(entity.getName());
+                }
 
-
+                String result = countryName + ":" + cityList.toString();
+                resultList.add(result);
+            }
 
             flag = false;
         } else {

@@ -73,7 +73,7 @@ public class RobotController {
         }catch (Exception e){
             logger.error("参数【{}】转换异常", jsonIds);
         } finally {
-            return JSONObject.toJSONString(result.size() == 0 ? "" : result);
+            return JSONObject.toJSONString(result.size() == 0 ? "未识别出正确的结果" : result);
         }
     }
 

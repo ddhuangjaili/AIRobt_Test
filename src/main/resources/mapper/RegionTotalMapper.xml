@@ -18,6 +18,18 @@
         from region_total
     </select>
 
+    <select id="queryCityByPid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from region_total
+        where pid = #{pid,jdbcType=BIGINT}
+    </select>
+
+    <select id="queryCountryById" resultType="java.lang.String" >
+        select 'name' from region_total
+        where id = #{id,jdbcType=BIGINT} and pid = null
+    </select>
+
     <select id="selectCount" resultType="java.lang.Integer">
         select count(1) from region_exception
         where id = #{id,jdbcType=BIGINT}
