@@ -6,7 +6,7 @@ public class RegionTotalEntity {
 
     private long pid;
 
-    private String name;
+    private String regName;
 
     private Integer status;
 
@@ -26,12 +26,12 @@ public class RegionTotalEntity {
         this.pid = pid;
     }
 
-    public String getName() {
-        return name;
+    public String getRegName() {
+        return regName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRegName(String regName) {
+        this.regName = regName;
     }
 
     public Integer getStatus() {

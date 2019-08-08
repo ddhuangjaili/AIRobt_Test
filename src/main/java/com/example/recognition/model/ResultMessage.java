@@ -10,7 +10,8 @@ public enum ResultMessage {
     ERROR_FILE_UPLOAD_NOPATH("9001"," video file upload fail, path is null! "),
     ERROR_BASE64_TO_FILE("9002","image base64 convert file fail."),
 
-
+    JSON_FIRST_WORDS("","您可输入出差城市，如"),
+    JSON_LAST_WORDS("","。我会为您查询对应的出差标准哟~"),
 
 
     ERROR_EMPTY_PARAM("9009","param list is empty, please get image base64 or file!"),

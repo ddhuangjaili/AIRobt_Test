@@ -8,6 +8,7 @@ import com.example.recognition.mapper.CompensationMapper;
 import com.example.recognition.mapper.RegionMapper;
 import com.example.recognition.mapper.RegionSingleMapper;
 import com.example.recognition.mapper.RegionTotalMapper;
+import com.example.recognition.model.ResultMessage;
 import com.example.recognition.service.RobotDataMaintainService;
 import org.springframework.stereotype.Service;
 
@@ -53,10 +54,14 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
                 List<RegionTotalEntity> entities = regionTotalMapper.queryCityByPid(id);
                 List<String> cityList = new ArrayList<>();
                 for (RegionTotalEntity entity :entities){
-                    cityList.add(entity.getName());
+                    cityList.add(entity.getRegName());
                 }
 
-                String result = countryName + ":" + cityList.toString();
+                //String result = countryName + ":" + cityList.toString();
+                String result = countryName + ":"
+                        + ResultMessage.JSON_FIRST_WORDS.getMessage()
+                        + cityList.toString().replace("[","【").replace("]","】")
+                        + ResultMessage.JSON_LAST_WORDS.getMessage();
                 resultList.add(result);
             }
 

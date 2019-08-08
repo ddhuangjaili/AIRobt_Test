@@ -5,12 +5,12 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="pid" property="pid" jdbcType="BIGINT" />
         <result column="type" property="type" jdbcType="INTEGER" />
-        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="cty_name" property="ctyName" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="INTEGER" />
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, pid, 'type', 'name', status
+        id, pid, 'type', cty_name, status
     </sql>
 
     <select id="selectAllForCN" resultMap="BaseResultMap">
@@ -26,6 +26,6 @@
     </select>
 
     <select id="queryToCountry" resultType="java.lang.String">
-        select 'name' from region_exception where id = #{id,jdbcType=BIGINT}
+        select cty_name from region_exception where id = #{id,jdbcType=BIGINT}
     </select>
 </mapper>

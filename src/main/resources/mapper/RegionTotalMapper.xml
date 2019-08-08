@@ -4,12 +4,12 @@
     <resultMap id="BaseResultMap" type="com.example.recognition.entity.RegionTotalEntity">
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="pid" property="pid" jdbcType="BIGINT" />
-        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="reg_name" property="regName" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="INTEGER" />
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, pid, 'name', status
+        id, pid, reg_name, status
     </sql>
 
     <select id="selectAll" resultMap="BaseResultMap">
@@ -26,8 +26,8 @@
     </select>
 
     <select id="queryCountryById" resultType="java.lang.String" >
-        select 'name' from region_total
-        where id = #{id,jdbcType=BIGINT} and pid = null
+        select reg_name from region_total
+        where id = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="selectCount" resultType="java.lang.Integer">

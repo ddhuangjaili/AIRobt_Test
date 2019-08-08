@@ -8,7 +8,7 @@ public class RegionSingleEntity {
 
     private Integer type;
 
-    private String name;
+    private String ctyName;
 
     private Integer status;
 
@@ -36,12 +36,12 @@ public class RegionSingleEntity {
         this.type = type;
     }
 
-    public String getName() {
-        return name;
+    public String getCtyName() {
+        return ctyName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCtyName(String ctyName) {
+        this.ctyName = ctyName;
     }
 
     public Integer getStatus() {
