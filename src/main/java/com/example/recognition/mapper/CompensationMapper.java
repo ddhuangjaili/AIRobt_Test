@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface CompensationMapper {
 
-    CompensationEntity queryContent(long id);
+    CompensationEntity queryContent(long regId);
 }

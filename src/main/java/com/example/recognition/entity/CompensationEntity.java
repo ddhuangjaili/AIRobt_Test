@@ -10,8 +10,6 @@ public class CompensationEntity {
 
     private String content;
 
-    private Integer status;
-
     public long getId() {
         return id;
     }
@@ -36,14 +34,6 @@ public class CompensationEntity {
         this.content = content;
     }
 
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
     public String getRegName() {
         return regName;
     }
@@ -52,11 +42,4 @@ public class CompensationEntity {
         this.regName = regName;
     }
 
-    public CompensationEntity(long id, long regId, String regName, String content, Integer status) {
-        this.id = id;
-        this.regId = regId;
-        this.regName = regName;
-        this.content = content;
-        this.status = status;
-    }
 }

@@ -34,4 +34,11 @@
         select count(1) from region_exception
         where id = #{id,jdbcType=BIGINT}
     </select>
+
+    <select id="effectiveQuery" resultType="java.lang.Integer">
+        select
+        count(1)
+        from region_total
+        where id = #{id,jdbcType=BIGINT}
+    </select>
 </mapper>

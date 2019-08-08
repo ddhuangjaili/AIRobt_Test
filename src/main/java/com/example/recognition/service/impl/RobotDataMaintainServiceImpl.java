@@ -79,6 +79,11 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
             int i = regionTotalMapper.selectCount(lg);
             if (i>1){
                 removeList.add(lg);
+            } else {
+                int er = regionTotalMapper.effectiveQuery(lg);
+                if (er == 0) {
+                    removeList.add(lg);
+                }
             }
         }
 

@@ -15,4 +15,6 @@ public interface RegionTotalMapper {
     String queryCountryById(long id);
 
     List<RegionTotalEntity> queryCityByPid(long pid);
+
+    Integer effectiveQuery(long id);
 }

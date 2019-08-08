@@ -7,9 +7,9 @@ import com.example.recognition.service.RobotDataMaintainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/robot")
+//@Api(tags = "出差")
 public class RobotController {
     private static final Logger logger = LoggerFactory.getLogger(RobotController.class);
 
@@ -48,9 +49,9 @@ public class RobotController {
         return JSONObject.toJSONString(list);
     }
 
-    @RequestMapping(value = "/queryByRegId", method = RequestMethod.GET)
+    @RequestMapping(value = "/queryByRegId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     //@ApiOperation("查询")
-    public String queryToContentByRegId(@RequestParam String jsonIds){
+    public String queryToContentByRegId(@RequestBody String jsonIds){
         List<String> result = new ArrayList<>();
         try {
             Map map = JSONObject.parseObject(jsonIds, Map.class);
