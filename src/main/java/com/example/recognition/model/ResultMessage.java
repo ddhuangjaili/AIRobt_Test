@@ -18,6 +18,7 @@ public enum ResultMessage {
     ROBOT_RESULT_EMPTY("4000","未找到对应的结果"),
     ROBOT_JSONPARAM_ERROR("4100","非法的请求参数,请输入正确的json"),
     ROBOT_JSONPARAM_EMPTY("4200","请求参数为空"),
+    ROBOT_RESULT_CONTENT("","中国:您可输入出差城市，如【北京, 上海, 天津, 重庆, 广州, 深圳, 三亚, 南京, 成都, 苏州, 杭州, 青岛,省会城市,其他城市等】"),
     /**云小蜜**/
 
     ERROR_EMPTY_PARAM("9009","param list is empty, please get image base64 or file!"),

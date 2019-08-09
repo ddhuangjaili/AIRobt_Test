@@ -51,18 +51,23 @@ public class RobotDataMaintainServiceImpl implements RobotDataMaintainService {
                 case "node":
                     List<Long> nodeList = idListMap.get(key);
                     for (long id : nodeList){
-                        String countryName = regionTotalMapper.queryCountryById(id);
-                        List<RegionTotalEntity> entities = regionTotalMapper.queryCityByPid(id);
-                        List<String> cityList = new ArrayList<>();
-                        for (RegionTotalEntity entity :entities){
-                            cityList.add(entity.getRegName());
-                        }
+                        String result = "";
+                        if(id == 9900){
+                            result = ResultMessage.ROBOT_RESULT_CONTENT.getMessage();
+                        } else {
+                            String countryName = regionTotalMapper.queryCountryById(id);
+                            List<RegionTotalEntity> entities = regionTotalMapper.queryCityByPid(id);
+                            List<String> cityList = new ArrayList<>();
+                            for (RegionTotalEntity entity : entities) {
+                                cityList.add(entity.getRegName());
+                            }
 
-                        //String result = countryName + ":" + cityList.toString();
-                        String result = countryName + ":"
-                                + ResultMessage.JSON_FIRST_WORDS.getMessage()
-                                + cityList.toString().replace("[","【").replace("]","】")
-                                + ResultMessage.JSON_LAST_WORDS.getMessage();
+                            //String result = countryName + ":" + cityList.toString();
+                            result = countryName + ":"
+                                    + ResultMessage.JSON_FIRST_WORDS.getMessage()
+                                    + cityList.toString().replace("[", "【").replace("]", "】")
+                                    + ResultMessage.JSON_LAST_WORDS.getMessage();
+                        }
                         resultList.add(result);
                     }
                 break;
