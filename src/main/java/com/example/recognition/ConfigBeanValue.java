@@ -28,4 +28,7 @@ public class ConfigBeanValue {
     /*追踪器开关*/
     @Value("${tracker_flag}")
     public String tracker_flag;
+
+    @Value("${ocr_url}")
+    public String orc_url;
 }
