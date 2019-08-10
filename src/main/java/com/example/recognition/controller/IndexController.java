@@ -1,21 +1,23 @@
 package com.example.recognition.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.recognition.ConfigBeanValue;
-import com.example.recognition.client.HttpClient;
-import com.example.recognition.model.JsonParam;
-import com.example.recognition.model.RequestParam;
+import com.example.recognition.client.HttpClientExtend;
+import com.example.recognition.model.*;
 import com.example.recognition.utils.BaseUtil;
+import com.example.recognition.utils.FileUtil;
+import com.example.recognition.utils.ImageBase64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,33 +38,81 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/ocr", method = RequestMethod.POST)
-    public String readPicWords(@RequestBody RequestParam request){
-        String imageBase64 = "";
+    public String readPicWords(RequestParam request){
+        String ocResult = "";
         String result = "";
         Map<String,Object> paramMap = new HashMap<>();
-        JsonParam jp = new JsonParam();
+        ResponseContent respCon = new ResponseContent();
 
-        imageBase64 = request.getImageBase64();
-        if (BaseUtil.stringNotNull(imageBase64)){
+        if (BaseUtil.stringNotNull(request.getImageBase64())){
             //base64
-            jp.setImgString(imageBase64);
+            JsonParam jp = new JsonParam();
+            jp.setImgString(request.getImageBase64());
             paramMap.put("param", JSONObject.toJSONString(jp));
             try {
-                result = HttpClient.doPost(config.orc_url, paramMap);
-
-
+                ocResult = HttpClientExtend.doPost(config.ocr_url, paramMap);
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-                logger.error("http Head设置异常!");
+                logger.error(ResultMessage.LOG_ERROR_HTTP_CHARACTER.getMessage());
+                respCon = new ResponseContent(ocResult,ResultMessage.ERROR_SYS_RUNTIME.getCode(),
+                        ResultMessage.ERROR_SYS_RUNTIME.getMessage());
             }
 
+        } else if (request.getFile() != null && !request.getFile().isEmpty()){
+            //文件转base64
+            String path = FileUtil.getInstance().savePicToGetPath(request.getFile(), config.ocr_path);
+            if (BaseUtil.stringNotNull(path)){
+                String base64 = ImageBase64.imageToBase64(path);
+                if (BaseUtil.stringNotNull(base64)) {
+                    JsonParam jp = new JsonParam();
+                    jp.setImgString(base64);
+                    paramMap.put("param", JSONObject.toJSONString(jp));
+                    try {
+                        ocResult = HttpClientExtend.doPost(config.ocr_url, paramMap);
+                    } catch (UnsupportedEncodingException e) {
+                        logger.error(ResultMessage.LOG_ERROR_HTTP_CHARACTER.getMessage());
+                        /*respCon = new ResponseContent(ocResult, ResultMessage.ERROR_SYS_RUNTIME.getCode(),
+                                ResultMessage.ERROR_SYS_RUNTIME.getMessage());*/
+                        respCon.setCode(ResultMessage.ERROR_SYS_RUNTIME.getCode());
+                        respCon.setMessage(ResultMessage.ERROR_SYS_RUNTIME.getMessage());
+                    }
+                }
+
+            } else {
+                logger.error(ResultMessage.LOG_ERROR_UPLOAD_NOPATH.getMessage());
+                respCon.setCode(ResultMessage.ERROR_IMAGE_UPLOAD_NOPATH.getCode());
+                respCon.setMessage(ResultMessage.ERROR_IMAGE_UPLOAD_NOPATH.getMessage());
+            }
 
         } else {
-            //文件
-
-
+            respCon.setResult("empty params");
+            respCon.setCode(ResultMessage.ERROR_EMPTY_PARAM.getCode());
+            respCon.setMessage(ResultMessage.ERROR_EMPTY_PARAM.getMessage());
         }
 
-        return BaseUtil.stringNull(result) ? "no words!" : result;
+        //封装result
+        if (BaseUtil.stringNotNull(ocResult)) {
+            OcrResultVo ocrResultVo = JSON.parseObject(ocResult, OcrResultVo.class);
+            List<DistinguishVo> res = ocrResultVo.getRes();
+            if (res.size() == 0) {
+                //无结果 记录code和message
+                /*respCon = new ResponseContent(result, ResultMessage.ERROR_RESULT_EMPTY.getCode(),
+                        ResultMessage.ERROR_RESULT_EMPTY.getMessage());*/
+                respCon.setCode(ResultMessage.ERROR_RESULT_EMPTY.getCode());
+                respCon.setMessage(ResultMessage.ERROR_RESULT_EMPTY.getMessage());
+            } else {
+                //有结果
+                for (DistinguishVo dv : res) {
+                    result += dv.getText();
+                }
+                /*respCon = new ResponseContent(result, ResultMessage.SUCCESS_RESULT.getCode(),
+                        ResultMessage.SUCCESS_RESULT.getMessage());*/
+                respCon.setResult(result);
+                respCon.setCode(ResultMessage.SUCCESS_RESULT.getCode());
+                respCon.setMessage(ResultMessage.SUCCESS_RESULT.getMessage());
+            }
+        }
+
+        return JSONObject.toJSONString(respCon);
     }
+
 }

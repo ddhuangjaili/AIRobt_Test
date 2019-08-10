@@ -34,4 +34,13 @@ public class ResponseContent {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public ResponseContent() {
+    }
+
+    public ResponseContent(String result, String code, String message) {
+        this.result = result;
+        this.code = code;
+        this.message = message;
+    }
 }

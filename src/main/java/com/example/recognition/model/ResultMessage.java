@@ -5,15 +5,17 @@ package com.example.recognition.model;
  */
 public enum ResultMessage {
 
-    SUCCESS_RESULT("0","success"),
+    SUCCESS_RESULT("1","success"),
     ERROR_RESULT_EMPTY("9000","no data of result return."),
     ERROR_FILE_UPLOAD_NOPATH("9001"," video file upload fail, path is null! "),
+    ERROR_IMAGE_UPLOAD_NOPATH("9003"," image file upload fail, path is null! "),
     ERROR_BASE64_TO_FILE("9002","image base64 convert file fail."),
-
-
-
-
     ERROR_EMPTY_PARAM("9009","param list is empty, please get image base64 or file!"),
+
+
+    ERROR_SYS_RUNTIME("4009","System runTime error!"),
+
+    LOG_ERROR_HTTP_CHARACTER("","The Character Encoding is not supported."),
 
     LOG_ERROR_UPLOAD_NOPATH("","未获取到有效video文件路径,请检查文件是否上传成功!"),
     LOG_ERROR_UPLOAD_NOFILE("","待保存视频未找到,请检查当前文件是否存在......"),

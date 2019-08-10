@@ -1,14 +1,5 @@
 package com.example.recognition.client;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -23,7 +14,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-public class HttpClient {
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
+
+public class HttpClientExtend {
 
     public static String doGet(String url) {
         CloseableHttpClient httpClient = null;
@@ -90,23 +85,24 @@ public class HttpClient {
         httpPost.setConfig(requestConfig);
         // 设置请求头
         //httpPost.setEntity(new StringEntity(paramMap.get("param").toString()));
-        httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        //httpPost.addHeader("Content-Type", "application/json");
+        //httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        httpPost.addHeader("Content-Type", "application/json");
         // 封装post请求参数
         if (null != paramMap && paramMap.size() > 0) {
-            List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+            /*List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             // 通过map集成entrySet方法获取entity
-            Set<Entry<String, Object>> entrySet = paramMap.entrySet();
+            Set<Map.Entry<String, Object>> entrySet = paramMap.entrySet();
             // 循环遍历，获取迭代器
-            Iterator<Entry<String, Object>> iterator = entrySet.iterator();
+            Iterator<Map.Entry<String, Object>> iterator = entrySet.iterator();
             while (iterator.hasNext()) {
-                Entry<String, Object> mapEntry = iterator.next();
+                Map.Entry<String, Object> mapEntry = iterator.next();
                 nvps.add(new BasicNameValuePair(mapEntry.getKey(), mapEntry.getValue().toString()));
-            }
+            }*/
 
             // 为httpPost设置封装好的请求参数
             try {
-                httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
+                //httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
+                httpPost.setEntity(new StringEntity(paramMap.get("param").toString()));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -116,7 +112,7 @@ public class HttpClient {
             httpResponse = httpClient.execute(httpPost);
             // 从响应对象中获取响应内容
             HttpEntity entity = httpResponse.getEntity();
-            result = EntityUtils.toString(entity);
+            result = EntityUtils.toString(entity,"utf-8");
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {

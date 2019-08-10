@@ -30,5 +30,8 @@ public class ConfigBeanValue {
     public String tracker_flag;
 
     @Value("${ocr_url}")
-    public String orc_url;
+    public String ocr_url;
+
+    @Value("${ocr_img}")
+    public String ocr_path;
 }
