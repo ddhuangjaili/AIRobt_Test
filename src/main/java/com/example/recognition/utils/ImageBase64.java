@@ -74,4 +74,22 @@ public class ImageBase64 {
             return false;
         }
     }
+
+    /**
+     * 去掉base64头部类型标签
+     * @param base64Str
+     * @return
+     */
+    public static String delBase64Top(String base64Str){
+        if (base64Str.contains("data:image/")){
+            int i = base64Str.indexOf(";");
+            if (i <= 0){
+                return base64Str;
+            }
+            else {
+                base64Str = base64Str.substring(i+1).replace("base64,","");
+            }
+        }
+        return base64Str;
+    }
 }

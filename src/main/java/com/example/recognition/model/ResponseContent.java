@@ -10,6 +10,8 @@ public class ResponseContent {
     private String code;
     /*返回信息*/
     private String message;
+    /*图片访问地址*/
+    private String imgUrl;
 
     public String getResult() {
         return result;
@@ -35,6 +37,14 @@ public class ResponseContent {
         this.message = message;
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     public ResponseContent() {
     }
 
@@ -42,5 +52,12 @@ public class ResponseContent {
         this.result = result;
         this.code = code;
         this.message = message;
+    }
+
+    public ResponseContent(String result, String code, String message, String imgUrl) {
+        this.result = result;
+        this.code = code;
+        this.message = message;
+        this.imgUrl = imgUrl;
     }
 }

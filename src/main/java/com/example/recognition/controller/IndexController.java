@@ -41,6 +41,11 @@ public class IndexController {
     public String readPicWords(RequestParam request){
         String ocResult = "";
         String result = "";
+        /*图片上传详情*/
+        String path = "";
+        String name = "";
+        boolean flag = false;
+        /*图片上传详情*/
         Map<String,Object> paramMap = new HashMap<>();
         ResponseContent respCon = new ResponseContent();
 
@@ -52,14 +57,30 @@ public class IndexController {
             try {
                 ocResult = HttpClientExtend.doPost(config.ocr_url, paramMap);
             } catch (UnsupportedEncodingException e) {
-                logger.error(ResultMessage.LOG_ERROR_HTTP_CHARACTER.getMessage());
+                logger.error("【{}】:{}",ResultMessage.LOG_ERROR_HTTP_CHARACTER.getCode(),
+                        ResultMessage.LOG_ERROR_HTTP_CHARACTER.getMessage());
                 respCon = new ResponseContent(ocResult,ResultMessage.ERROR_SYS_RUNTIME.getCode(),
                         ResultMessage.ERROR_SYS_RUNTIME.getMessage());
             }
 
+            name = System.currentTimeMillis() + "_img.jpg";
+            path = config.ocr_path + System.getProperty("file.separator")
+                    + name;
+            /*flag = ImageBase64.base64ToImage(request.getImageBase64().substring(
+                    request.getImageBase64().indexOf(";") + 1
+                    ).replace("base64,",""), path);*/
+            flag = ImageBase64.base64ToImage(ImageBase64.delBase64Top(request.getImageBase64()), path);
+            if (!flag){
+                logger.error("【{}】:{}",ResultMessage.ERROR_BASE64_TO_FILE.getCode(),
+                        ResultMessage.ERROR_BASE64_TO_FILE.getMessage());
+            }
+
         } else if (request.getFile() != null && !request.getFile().isEmpty()){
             //文件转base64
-            String path = FileUtil.getInstance().savePicToGetPath(request.getFile(), config.ocr_path);
+            //String path = FileUtil.getInstance().savePicToGetPath(request.getFile(), config.ocr_path);
+            ImageUploadVo vo = FileUtil.getInstance().savePicToGetPath(request.getFile(), config.ocr_path);
+            path = vo.getPath();
+            name = vo.getName();
             if (BaseUtil.stringNotNull(path)){
                 String base64 = ImageBase64.imageToBase64(path);
                 if (BaseUtil.stringNotNull(base64)) {
@@ -69,7 +90,8 @@ public class IndexController {
                     try {
                         ocResult = HttpClientExtend.doPost(config.ocr_url, paramMap);
                     } catch (UnsupportedEncodingException e) {
-                        logger.error(ResultMessage.LOG_ERROR_HTTP_CHARACTER.getMessage());
+                        logger.error("【{}】:{}",ResultMessage.LOG_ERROR_HTTP_CHARACTER.getCode(),
+                                ResultMessage.LOG_ERROR_HTTP_CHARACTER.getMessage());
                         /*respCon = new ResponseContent(ocResult, ResultMessage.ERROR_SYS_RUNTIME.getCode(),
                                 ResultMessage.ERROR_SYS_RUNTIME.getMessage());*/
                         respCon.setCode(ResultMessage.ERROR_SYS_RUNTIME.getCode());
@@ -77,8 +99,10 @@ public class IndexController {
                     }
                 }
 
+                flag = true;
             } else {
-                logger.error(ResultMessage.LOG_ERROR_UPLOAD_NOPATH.getMessage());
+                logger.error("【{}】:{}",ResultMessage.LOG_ERROR_UPLOAD_NOPATH.getCode(),
+                        ResultMessage.LOG_ERROR_UPLOAD_NOPATH.getMessage());
                 respCon.setCode(ResultMessage.ERROR_IMAGE_UPLOAD_NOPATH.getCode());
                 respCon.setMessage(ResultMessage.ERROR_IMAGE_UPLOAD_NOPATH.getMessage());
             }
@@ -103,6 +127,10 @@ public class IndexController {
                 //有结果
                 for (DistinguishVo dv : res) {
                     result += dv.getText();
+                }
+
+                if (flag && BaseUtil.stringNotNull(name)){
+                    respCon.setImgUrl(config.img_url + name);
                 }
                 /*respCon = new ResponseContent(result, ResultMessage.SUCCESS_RESULT.getCode(),
                         ResultMessage.SUCCESS_RESULT.getMessage());*/

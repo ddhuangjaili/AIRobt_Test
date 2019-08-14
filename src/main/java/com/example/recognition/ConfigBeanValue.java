@@ -34,4 +34,7 @@ public class ConfigBeanValue {
 
     @Value("${ocr_img}")
     public String ocr_path;
+
+    @Value("${img_base_url}")
+    public String img_url;
 }

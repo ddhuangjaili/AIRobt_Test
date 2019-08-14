@@ -1,5 +1,6 @@
 package com.example.recognition.utils;
 
+import com.example.recognition.model.ImageUploadVo;
 import com.example.recognition.model.ResultMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,11 +83,12 @@ public class FileUtil {
      * @param file
      * @return
      */
-    public String savePicToGetPath(MultipartFile file, String savePath){
+    public ImageUploadVo savePicToGetPath(MultipartFile file, String savePath){
         logger.info("开始保存图片...");
         String path = null;
         InputStream inputStream = null;
         OutputStream os = null;
+        String name = "";
         int len;
         /*设置缓冲区*/
         byte[] bs = new byte[1024];
@@ -99,7 +101,7 @@ public class FileUtil {
 
         try {
             inputStream = file.getInputStream();
-            String name = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(File.separator)+1);
+            name = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(File.separator)+1);
             logger.info("当前保存的文件名:"+name);
             path = tempFile.getPath() + File.separator + System.currentTimeMillis() + "_" +name;
             logger.info("文件的完整路径:"+path);
@@ -128,6 +130,11 @@ public class FileUtil {
             }
         }
 
-        return path;
+        //新增图片上传文件信息类
+        ImageUploadVo vo = new ImageUploadVo(
+                BaseUtil.stringNotNull(path) ? path : "",
+                BaseUtil.stringNotNull(name) ? name : "");
+
+        return vo;
     }
 }
